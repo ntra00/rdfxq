@@ -161,6 +161,8 @@ declare function rdfxml2trix:parse_property(
             let $plainLiteral := fn:string-join($node//text(), " ")
             let $plainLiteral := fn:replace($plainLiteral, "\n", " ")
             let $plainLiteral := fn:replace($plainLiteral, "\t", " ")
+           
+            
             return element trix:plainLiteral { $plainLiteral }
             (: '"Comment"' :)
         else if (fn:local-name($node/child::node()[fn:name()][1]) ne "") then
@@ -334,10 +336,14 @@ declare function rdfxml2trix:clean_string($str as xs:string) as xs:string
  {
     let $str := fn:replace( $str, '\\', '\\\\')
     let $str := fn:replace( $str , '&quot;' , '\\"')
-    let $str := fn:replace( $str, "\n", "\\r\\n")
+    (:let $str := fn:replace( $str, "\n", "\\r\\n"):)
     let $str := fn:replace( $str, "’", "'")
     let $str := fn:replace( $str, '“|”', '\\"')
     let $str := fn:replace( $str, 'ā', '\\u0101')
+    let $str := fn:replace( $str, "\\r\\n", " ")
+    let $str := fn:replace( $str, "\n", " ")
+    let $str := fn:replace( $str, "\t", " ")
+    let $str := fn:replace( $str, "   ", " ")
     return $str
 };
 
